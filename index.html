@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Secret Match</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f4f4f9; }
+    .card { background: white; padding: 2rem 3rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
+    .match { font-size: 2rem; font-weight: bold; color: #2b59c3; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>You are paired with:</h2>
+    <div id="result" class="match">Loading...</div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get('to');
+    const resultDiv = document.getElementById('result');
+
+    if (encoded) {
+      try {
+        // Decode URL-safe Base64 and handle special characters/accents properly
+        const base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+        const bytes = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+        const decodedName = new TextDecoder().decode(bytes);
+        resultDiv.textContent = decodedName;
+      } catch (e) {
+        resultDiv.textContent = "Invalid link!";
+      }
+    } else {
+      resultDiv.textContent = "No match found in link.";
+    }
+  </script>
+</body>
+</html>
